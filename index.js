@@ -23,6 +23,7 @@ async function enableMocking() {
 }
 
 enableMocking().then(() => {
-  AppRegistry.registerComponent(appName, () => App);
+  // This is too late as the "A module failed to load due to an error or AppRegistry.registerComponent wasn't called." error will show
+  //AppRegistry.registerComponent(appName, () => App);
   console.log('MSW started.......');
 });
