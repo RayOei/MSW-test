@@ -11,7 +11,15 @@ describe('Example', () => {
     await device.reloadReactNative();
   });
 
-  it('should have ververs button', async () => {
+  afterEach(async () => {
+    server.resetHandlers();
+  });
+
+  afterAll(async () => {
+    server.close();
+  });
+
+  it('should have <v>ervers> button', async () => {
     await expect(element(by.id('ververs'))).toBeVisible();
   });
 
@@ -28,7 +36,8 @@ describe('Example', () => {
     jestExpect(attributes0.text).toContain('Back to the Future, 1985');
   });
 
-  it('Ververs -> should have Mandolarion last', async () => {
+  it('Ververs -> should have Mandolarion last => THIS ONE FAILS', async () => {
+    // It looks like this server.use is not seen??
     server.use(
       http.get('https://reactnative.dev/movies.json', () => {
         return HttpResponse.json({
@@ -46,6 +55,6 @@ describe('Example', () => {
     await element(by.id('ververs')).tap();
     await expect(element(by.id('item-4'))).toBeVisible();
     const attributes0 = await element(by.id('item-4')).getAttributes();
-    jestExpect(attributes0.text).toContain('Mandolarian, 1985');
+    jestExpect(attributes0.text).toContain('Mandolarian, 2021');
   });
 });
