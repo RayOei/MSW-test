@@ -12,14 +12,13 @@ async function enableMocking() {
   if (!__DEV__) {
     return;
   }
-  console.log('LOADING.......');
+  console.log('MSW loading.......');
   await import('./e2e/msw.polyfills');
-  console.log('Import.......');
+  console.log('MSW init.......');
   const {server} = await import('./e2e/mocks/server');
-  console.log('Server.......');
   server.listen();
-  console.log('Server listening.......');
-  server.listHandlers();
+  console.log('MSW listening.......');
+  console.log(server.listHandlers());
 }
 
 enableMocking().then(() => {

@@ -19,8 +19,16 @@ describe('Example', () => {
     server.close();
   });
 
-  it('should have <v>ervers> button', async () => {
+  it('should have <Refresh> button', async () => {
     await expect(element(by.id('ververs'))).toBeVisible();
+  });
+
+  it('should have <Reset> button', async () => {
+    await expect(element(by.id('reset'))).toBeVisible();
+  });
+
+  it('should have <Clear> button', async () => {
+    await expect(element(by.id('clear'))).toBeVisible();
   });
 
   it('should have Intersteller last', async () => {
@@ -29,17 +37,29 @@ describe('Example', () => {
     jestExpect(attributes0.text).toContain('Interstellar, 2014');
   });
 
-  it('Ververs -> should have BTTF last', async () => {
+  it('Refresh -> should have BTTF last', async () => {
     await element(by.id('ververs')).tap();
     await expect(element(by.id('item-5'))).toBeVisible();
     const attributes0 = await element(by.id('item-5')).getAttributes();
     jestExpect(attributes0.text).toContain('Back to the Future, 1985');
   });
 
-  it('Ververs -> should have Mandolarion last => THIS ONE FAILS', async () => {
+  it('CLEAR -> only unknown entries', async () => {
+    await element(by.id('clear')).tap();
+    await expect(element(by.id('item-4'))).toBeVisible();
+    const attributes0 = await element(by.id('item-4')).getAttributes();
+    jestExpect(attributes0.text).toContain('Onbekend');
+  });
+
+  // Following instructions from https://mswjs.io/docs/best-practices/structuring-handlers
+  it('Refresh -> should have Mandolarion last => THIS ONE FAILS', async () => {
+    console.log(
+      '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
+    );
+    console.log(server.listHandlers());
     // It looks like this server.use is not seen??
-    server.use(
-      http.get('https://reactnative.dev/movies.json', () => {
+    server.resetHandlers(
+      http.get('https://fake_reactnative.dev/movies.json', () => {
         return HttpResponse.json({
           title: 'The Basics - Networking',
           description: 'Your app fetched this from a TEST endpoint!',
@@ -51,6 +71,13 @@ describe('Example', () => {
           ],
         });
       }),
+    );
+    console.log(
+      '-------------------------------------------------------------',
+    );
+    console.log(server.listHandlers());
+    console.log(
+      '=============================================================',
     );
     await element(by.id('ververs')).tap();
     await expect(element(by.id('item-4'))).toBeVisible();

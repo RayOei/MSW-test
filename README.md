@@ -45,11 +45,15 @@ detox build -c ios.sim.debug
 
 ### Metro
 
+Start metro session in terminal
+
 ```bash
 yarn start --reset-cache
 ```
 
 ### Test
+
+Start detox run in seperate terminal
 
 ```bash
 detox test -l trace -c ios.sim.debug starter.test.js 

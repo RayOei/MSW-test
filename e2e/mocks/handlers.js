@@ -5,8 +5,12 @@ export const handlers = [
     bypass(request);
   }),
 
-  // Intercept the "GET /jason_boxinfo.xml" request.
-  http.get('https://reactnative.dev/movies.json', () => {
+  http.get('https://reactnative.dev/movies.json', ({request}) => {
+    //return HttpResponse.error();
+    bypass(request);
+  }),
+
+  http.get('https://fake_reactnative.dev/movies.json', () => {
     return HttpResponse.json({
       title: 'The Basics - Networking',
       description: 'Your app fetched this from a TEST endpoint!',
