@@ -15,13 +15,28 @@ const App = () => {
   const getMovies = async () => {
     try {
       const response = await fetch('https://reactnative.dev/movies.json');
-      const json = await response.json();
-      setData(json.movies);
+      if (response.ok) {
+        const json = await response.json();
+        setData(json.movies);
+      } else {
+        let resetJson = {
+          title: 'Error received',
+          description: 'Error reveived from real endpoint call!',
+          movies: [
+            {
+              id: '1',
+              title: `${(await response.text()).toString()}`,
+              releaseYear: `${response.status}`,
+            },
+          ],
+        };
+        setData(resetJson.movies);
+      }
     } catch (error) {
       console.debug(`Error with getMovies: ${error}`);
       let resetJson = {
         title: 'Nothing received',
-        description: 'Nothing reveived from real endpoint!',
+        description: 'Nothing reveived from real endpoint call!',
         movies: [
           {
             id: '1',
@@ -49,7 +64,7 @@ const App = () => {
       console.debug(`Error with getFakeMovies: ${error}`);
       let resetJson = {
         title: 'Nothing received',
-        description: 'Nothing reveived from endpoint!',
+        description: 'Nothing reveived from fake endpoint call!',
         movies: [
           {
             id: '1',
