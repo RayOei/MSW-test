@@ -1,12 +1,55 @@
-# Getting Started
+# MSW with React Native
 
-Based on: This is a new [**React Native**](https://reactnative.dev) project
+Demo app to illustrate issues with MSW
+
+- [MSW with React Native](#msw-with-react-native)
+  - [Issues](#issues)
+  - [Demo app](#demo-app)
+  - [Environment](#environment)
+  - [Installed](#installed)
+    - [Detox](#detox)
+    - [Msw](#msw)
+  - [Run](#run)
+    - [Build](#build)
+    - [Metro](#metro)
+    - [Test](#test)
+      - [Logging](#logging)
+
+## Issues
+
+Originally this demo app was made for issue `#1`, but while debugging further, more issues seem to exist with handling of the interception and subsequent handling of the defined responses.
+
+1. It seems the [server.use](./e2e/starter.test.js#68) definition is added to the stack but is not triggered when a call is intercepted
+2. It seems the case where [server.resetHandler](./e2e/starter.test.js#66) is used with a new definition, the call is no longer intercepted
+3. It seems that handler definition for [fake_reactnative.dev/movies.json](/e2e/mocks/handlers.js#35) is not called when the app is loading while it is expected to be used from the moment `msw` is initialised
+4. It seems that the handler with the definition [once](/e2e/mocks/handlers.js#9) is always called while the expectation is that the 2nd and subsequent calls would trigger the [next definition](/e2e/mocks/handlers.js#17) for `reactnative.dev/movies.json`.
+
+> In short: there seem to be issues with the handling of intercepted calls and the processing of the defined responses.
+
+## Demo app
+
+The app is based on the React Native `Quick starter` demo: [**React Native**](https://reactnative.dev) project. Where a movie list is retrieved. This app has been modified to:
+
+1. Retrieve a fake URL with the [FakeMovies] button
+2. Retrieve the real URL with the [GetMovies] button - although the behaviour is controlled by the handlers so the `real` response should not be shown
+3. Reset the list with the [Clear] button - no handler or API call is used here
+
+The handling of the specific `fetch` in the [app](./App.tsx) is expanded with error messages, to be shown in the list:
+
+1. for `!response.ok` (e.g. non `2xx`) responses
+2. and the `http.error()` response (e.g. no network)
+
+Which can be used to further check the actual behaviour of the defined handler responses.
+
+> No special care has been taken in cleaning up or minimising code duplication :-)
+
 
 ## Environment
 
-* MB Pro M2-Max
-* MacOS 14.3.1
-* Emulator iOS v17.0.1
+
+- MB Pro M2-Max
+- MacOS 14.3.1
+- Emulator iOS v17.0.1
 
 ## Installed
 
@@ -59,137 +102,11 @@ Start detox run in seperate terminal
 detox test -l trace -c ios.sim.debug starter.test.js 
 ```
 
-#### Metro console
+#### Logging
 
-```bash
- BUNDLE  ./index.js 
+Check:
 
- LOG  LOADING.......
- LOG  Running "msw_test" with {"rootTag":1,"initialProps":{}}
- LOG  ......Starting APP.......
- LOG  ......Starting APP.......
- LOG  ......Starting APP.......
- BUNDLE  e2e/msw.polyfills.js 
+1. metro terminal for logging
+2. detox terminal for logging (for additional detox logging, see `detox` doc.)
 
- LOG  Import.......
- BUNDLE  e2e/mocks/server.js 
-
- LOG  Server.......
- LOG  Server listening.......
- LOG  MSW started.......
- BUNDLE  ./index.js 
-
- BUNDLE  e2e/msw.polyfills.js 
-
- LOG  LOADING.......
- LOG  Running "msw_test" with {"rootTag":11,"initialProps":{}}
- LOG  ......Starting APP.......
- LOG  Import.......
- BUNDLE  e2e/mocks/server.js 
-
- LOG  Server.......
- LOG  Server listening.......
- LOG  MSW started.......
- LOG  ......Starting APP.......
- LOG  ......Starting APP.......
- BUNDLE  ./index.js 
-
- BUNDLE  e2e/msw.polyfills.js 
-
- LOG  LOADING.......
- LOG  Running "msw_test" with {"rootTag":21,"initialProps":{}}
- LOG  ......Starting APP.......
- LOG  Import.......
- BUNDLE  e2e/mocks/server.js 
-
- LOG  ......Starting APP.......
- LOG  ......Starting APP.......
- LOG  Server.......
- LOG  Server listening.......
- LOG  MSW started.......
- BUNDLE  ./index.js 
-
- BUNDLE  e2e/msw.polyfills.js 
-
- LOG  LOADING.......
- LOG  Running "msw_test" with {"rootTag":31,"initialProps":{}}
- LOG  ......Starting APP.......
- LOG  Import.......
- BUNDLE  e2e/mocks/server.js 
-
- LOG  ......Starting APP.......
- LOG  ......Starting APP.......
- LOG  Server.......
- LOG  Server listening.......
- LOG  MSW started.......
- LOG  Outgoing: GET https://reactnative.dev/movies.json
- LOG  ......Starting APP.......
- LOG  ......Starting APP.......
- BUNDLE  ./index.js 
-
- BUNDLE  e2e/msw.polyfills.js 
-
- LOG  LOADING.......
- LOG  Running "msw_test" with {"rootTag":41,"initialProps":{}}
- LOG  ......Starting APP.......
- LOG  Import.......
- BUNDLE  e2e/mocks/server.js 
-
- LOG  ......Starting APP.......
- LOG  ......Starting APP.......
- LOG  Server.......
- LOG  Server listening.......
- LOG  MSW started.......
- LOG  Outgoing: GET https://reactnative.dev/movies.json
- LOG  ......Starting APP.......
- LOG  ......Starting APP.......
-```
-
-#### Detox console
-
-```bash
-$> detox test -l info --record-logs all -c ios.sim.debug starter.test.js  
-15:34:44.091 detox[19310] B jest --config e2e/jest.config.js starter.test.js
-15:34:47.616 detox[19311] i starter.test.js is assigned to 3D76136D-9D8C-4B90-85FC-F7ECE8775A66 (iPhone 15 Pro)
-15:34:49.118 detox[19311] i org.reactjs.native.example.msw-test launched. To watch simulator logs, run:
-        /usr/bin/xcrun simctl spawn 3D76136D-9D8C-4B90-85FC-F7ECE8775A66 log stream --level debug --style compact --predicate 'process == "msw_test"'
-15:34:54.096 detox[19311] i Example: should have <v>ervers> button
-15:34:55.411 detox[19311] i Example: should have <v>ervers> button [OK]
-15:34:55.412 detox[19311] i Example: should have Intersteller last
-15:34:56.673 detox[19311] i Example: should have Intersteller last [OK]
-15:34:56.674 detox[19311] i Example: Ververs -> should have BTTF last
-15:34:58.393 detox[19311] i Example: Ververs -> should have BTTF last [OK]
-15:34:58.393 detox[19311] i Example: Ververs -> should have Mandolarion last => THIS ONE FAILS
-15:35:00.114 detox[19311] i Example: Ververs -> should have Mandolarion last => THIS ONE FAILS [FAIL]
-
- FAIL  e2e/starter.test.js (15.732 s)
-  Example
-    ✓ should have <v>ervers> button (1259 ms)
-    ✓ should have Intersteller last (1205 ms)
-    ✓ Ververs -> should have BTTF last (1664 ms)
-    ✕ Ververs -> should have Mandolarion last => THIS ONE FAILS (1665 ms)
-
-  ● Example › Ververs -> should have Mandolarion last => THIS ONE FAILS
-
-    expect(received).toContain(expected) // indexOf
-
-    Expected substring: "Mandolarian, 2021"
-    Received string:    "Interstellar, 2014"
-
-      56 |     await expect(element(by.id('item-4'))).toBeVisible();
-      57 |     const attributes0 = await element(by.id('item-4')).getAttributes();
-    > 58 |     jestExpect(attributes0.text).toContain('Mandolarian, 2021');
-         |                                  ^
-      59 |   });
-      60 | });
-      61 |
-
-      at Object.toContain (e2e/starter.test.js:58:34)
-      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:24)
-      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:9)
-
-Test Suites: 1 failed, 1 total
-Tests:       1 failed, 3 passed, 4 total
-Snapshots:   0 total
-Time:        15.773 s
-```
+> Note: removed original included logging from this file as that is no longer representative after the app changes.

@@ -63,7 +63,8 @@ describe('Example', () => {
       '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
     );
     console.log(server.listHandlers());
-    // It looks like this server.use is not seen??
+    //server.resetHandler(
+      // It looks like this server.use is not seen??
     server.use(
       http.get('https://fake_reactnative.dev/movies.json', () => {
         return HttpResponse.json({
