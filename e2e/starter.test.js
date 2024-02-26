@@ -31,13 +31,19 @@ describe('Example', () => {
     await expect(element(by.id('clear'))).toBeVisible();
   });
 
-  it('should have Intersteller last', async () => {
-    await expect(element(by.id('item-5'))).toBeVisible();
-    const attributes0 = await element(by.id('item-5')).getAttributes();
-    jestExpect(attributes0.text).toContain('Interstellar, 2014');
+  it('should return 404', async () => {
+    await expect(element(by.id('item-1'))).toBeVisible();
+    const attributes0 = await element(by.id('item-1')).getAttributes();
+    jestExpect(attributes0.text).toContain('Only returned once, 404');
   });
 
-  it('Refresh -> should have BTTF last', async () => {
+  it('should return `last again`', async () => {
+    await expect(element(by.id('item-5'))).toBeVisible();
+    const attributes0 = await element(by.id('item-5')).getAttributes();
+    jestExpect(attributes0.text).toContain('And as last again, 1975');
+  });
+
+  it('GetFakeMovies -> should have BTTF last', async () => {
     await element(by.id('ververs')).tap();
     await expect(element(by.id('item-5'))).toBeVisible();
     const attributes0 = await element(by.id('item-5')).getAttributes();
@@ -48,7 +54,7 @@ describe('Example', () => {
     await element(by.id('clear')).tap();
     await expect(element(by.id('item-4'))).toBeVisible();
     const attributes0 = await element(by.id('item-4')).getAttributes();
-    jestExpect(attributes0.text).toContain('Onbekend');
+    jestExpect(attributes0.text).toContain('Endpoint');
   });
 
   // Following instructions from https://mswjs.io/docs/best-practices/structuring-handlers
