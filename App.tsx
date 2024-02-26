@@ -19,6 +19,23 @@ const App = () => {
       setData(json.movies);
     } catch (error) {
       console.debug(`Error with getMovies: ${error}`);
+      let resetJson = {
+        title: 'Nothing received',
+        description: 'Nothing reveived from real endpoint!',
+        movies: [
+          {
+            id: '1',
+            title: 'ERROR REVEIVED from real endpoint call',
+            releaseYear: '1xxx',
+          },
+          {
+            id: '2',
+            title: 'EXPECTED response from handler',
+            releaseYear: '1xxx',
+          },
+        ],
+      };
+      setData(resetJson.movies);
     } finally {
       setLoading(false);
     }
@@ -30,20 +47,37 @@ const App = () => {
       setData(json.movies);
     } catch (error) {
       console.debug(`Error with getFakeMovies: ${error}`);
+      let resetJson = {
+        title: 'Nothing received',
+        description: 'Nothing reveived from endpoint!',
+        movies: [
+          {
+            id: '1',
+            title: 'ERROR REVEIVED from fake call',
+            releaseYear: '2xxx',
+          },
+          {
+            id: '2',
+            title: 'EXPECTED response from handler',
+            releaseYear: '2xxx',
+          },
+        ],
+      };
+      setData(resetJson.movies);
     } finally {
       setLoading(false);
     }
   };
-  const resetMovies = async () => {
+  const clearMovies = async () => {
     try {
       let resetJson = {
         title: 'The Basics - Networking',
         description: 'Your app fetched this from a TEST endpoint!',
         movies: [
-          {id: '1', title: 'Nada', releaseYear: '1970'},
-          {id: '2', title: 'Niets', releaseYear: '1970'},
-          {id: '3', title: 'Leeg', releaseYear: '1970'},
-          {id: '4', title: 'Onbekend', releaseYear: '1970'},
+          {id: '1', title: 'Cleaned', releaseYear: ''},
+          {id: '2', title: 'No call', releaseYear: ''},
+          {id: '3', title: 'to', releaseYear: ''},
+          {id: '4', title: 'Endpoint', releaseYear: ''},
         ],
       };
       setData(resetJson.movies);
@@ -86,17 +120,17 @@ const App = () => {
           <Button
             onPress={() => getMovies()}
             testID="reset"
-            title="Reset"
+            title="GetMovies"
             color="green"
           />
           <Button
             onPress={() => getFakeMovies()}
             testID="ververs"
-            title="Refresh"
+            title="GetFakeMovies"
             color="red"
           />
           <Button
-            onPress={() => resetMovies()}
+            onPress={() => clearMovies()}
             testID="clear"
             title="Clear"
             color="blue"

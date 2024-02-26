@@ -1,4 +1,4 @@
-import {http, bypass, HttpResponse} from 'msw';
+import {http, bypass, HttpResponse, passthrough} from 'msw';
 
 export const handlers = [
   http.all('http://localhost:8081/symbolicate', ({request}) => {
@@ -6,14 +6,17 @@ export const handlers = [
   }),
 
   http.get('https://reactnative.dev/movies.json', ({request}) => {
+    // With error the error response should be shown
     //return HttpResponse.error();
-    bypass(request);
+
+    // Real response should be shown
+    passthrough(request);
   }),
 
   http.get('https://fake_reactnative.dev/movies.json', () => {
     return HttpResponse.json({
-      title: 'The Basics - Networking',
-      description: 'Your app fetched this from a TEST endpoint!',
+      title: 'Handler response',
+      description: 'App fetched this from a MSW endpoint!',
       movies: [
         {id: '1', title: 'Inception', releaseYear: '2010'},
         {id: '2', title: 'Star Wars', releaseYear: '1977'},

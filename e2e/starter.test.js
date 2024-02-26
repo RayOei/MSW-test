@@ -58,11 +58,11 @@ describe('Example', () => {
     );
     console.log(server.listHandlers());
     // It looks like this server.use is not seen??
-    server.resetHandlers(
+    server.use(
       http.get('https://fake_reactnative.dev/movies.json', () => {
         return HttpResponse.json({
-          title: 'The Basics - Networking',
-          description: 'Your app fetched this from a TEST endpoint!',
+          title: 'Handler response',
+          description: 'App fetched this from a intermediate MSW endpoint!',
           movies: [
             {id: '1', title: 'Inception', releaseYear: '2010'},
             {id: '2', title: 'Star Wars', releaseYear: '1977'},
