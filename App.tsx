@@ -58,8 +58,23 @@ const App = () => {
   const getFakeMovies = async () => {
     try {
       const response = await fetch('https://fake_reactnative.dev/movies.json');
-      const json = await response.json();
-      setData(json.movies);
+      if (response.ok) {
+        const json = await response.json();
+        setData(json.movies);
+      } else {
+        let resetJson = {
+          title: 'Error received',
+          description: 'Error reveived from fake endpoint call!',
+          movies: [
+            {
+              id: '1',
+              title: `${(await response.text()).toString()}`,
+              releaseYear: `${response.status}`,
+            },
+          ],
+        };
+        setData(resetJson.movies);
+      }
     } catch (error) {
       console.debug(`Error with getFakeMovies: ${error}`);
       let resetJson = {
