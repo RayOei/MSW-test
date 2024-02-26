@@ -17,7 +17,7 @@ Demo app to illustrate issues with MSW
 
 ## Issues
 
-Originally this demo app was made for issue `#1`, but while debugging further, more issues seem to exist with handling of the interception and subsequent handling of the defined responses.
+Originally this demo app was made for reported issue [#1](https://github.com/mswjs/msw/issues/2042), but while debugging further, more issues seem to exist with handling of the interception and subsequent handling of the defined responses.
 
 1. It seems the [server.use](./e2e/starter.test.js#68) definition is added to the stack but is not triggered when a call is intercepted
 2. It seems the case where [server.resetHandler](./e2e/starter.test.js#66) is used with a new definition, the call is no longer intercepted
