@@ -19,38 +19,40 @@ describe('Example', () => {
     server.close();
   });
 
-  it('should have <Refresh> button', async () => {
-    await expect(element(by.id('ververs'))).toBeVisible();
+  it('should have <getMovies> button', async () => {
+    await expect(element(by.id('getMovies'))).toBeVisible();
   });
 
-  it('should have <Reset> button', async () => {
-    await expect(element(by.id('reset'))).toBeVisible();
+  it('should have <getFakeMovies> button', async () => {
+    await expect(element(by.id('getFakeMovies'))).toBeVisible();
   });
 
   it('should have <Clear> button', async () => {
     await expect(element(by.id('clear'))).toBeVisible();
   });
 
-  it('should return 404', async () => {
+  it('getMovies should return 404', async () => {
+    await element(by.id('getMovies')).tap();
     await expect(element(by.id('item-1'))).toBeVisible();
     const attributes0 = await element(by.id('item-1')).getAttributes();
     jestExpect(attributes0.text).toContain('Only returned once, 404');
   });
 
-  it('should return `last again`', async () => {
-    await expect(element(by.id('item-5'))).toBeVisible();
-    const attributes0 = await element(by.id('item-5')).getAttributes();
-    jestExpect(attributes0.text).toContain('And as last again, 1975');
+  it('2nd getMovies should return `last again`', async () => {
+    await element(by.id('getMovies')).tap();
+    await expect(element(by.id('item-1'))).toBeVisible();
+    const attributes0 = await element(by.id('item-1')).getAttributes();
+    jestExpect(attributes0.text).toContain('Some other, 1999');
   });
 
-  it('GetFakeMovies -> should have BTTF last', async () => {
-    await element(by.id('ververs')).tap();
+  it('GetFakeMovies should have Movie_fake_5 last', async () => {
+    await element(by.id('getFakeMovies')).tap();
     await expect(element(by.id('item-5'))).toBeVisible();
     const attributes0 = await element(by.id('item-5')).getAttributes();
-    jestExpect(attributes0.text).toContain('Back to the Future, 1985');
+    jestExpect(attributes0.text).toContain('Movie_fake_5, 1985');
   });
 
-  it('CLEAR -> only unknown entries', async () => {
+  it('CLEAR should only have `unknown` entries', async () => {
     await element(by.id('clear')).tap();
     await expect(element(by.id('item-4'))).toBeVisible();
     const attributes0 = await element(by.id('item-4')).getAttributes();
@@ -58,23 +60,23 @@ describe('Example', () => {
   });
 
   // Following instructions from https://mswjs.io/docs/best-practices/structuring-handlers
-  it('Refresh -> should have Mandolarion last => THIS ONE FAILS', async () => {
+  it('Refresh -> should have Use_Movie_fake_4 last => THIS ONE FAILS', async () => {
     console.log(
       '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
     );
     console.log(server.listHandlers());
     //server.resetHandler(
-      // It looks like this server.use is not seen??
+    // It looks like this server.use is not seen??
     server.use(
       http.get('https://fake_reactnative.dev/movies.json', () => {
         return HttpResponse.json({
           title: 'Handler response',
           description: 'App fetched this from a intermediate MSW endpoint!',
           movies: [
-            {id: '1', title: 'Inception', releaseYear: '2010'},
-            {id: '2', title: 'Star Wars', releaseYear: '1977'},
-            {id: '3', title: 'Interstellar', releaseYear: '2014'},
-            {id: '4', title: 'Mandolarion', releaseYear: '2021'},
+            {id: '1', title: 'Use_Movie_fake_1', releaseYear: '2010'},
+            {id: '2', title: 'Use_Movie_fake_2', releaseYear: '1977'},
+            {id: '3', title: 'Use_Movie_fake_3', releaseYear: '2014'},
+            {id: '4', title: 'Use_Movie_fake_4', releaseYear: '2021'},
           ],
         });
       }),
@@ -86,9 +88,9 @@ describe('Example', () => {
     console.log(
       '=============================================================',
     );
-    await element(by.id('ververs')).tap();
+    await element(by.id('getFakeMovies')).tap();
     await expect(element(by.id('item-4'))).toBeVisible();
     const attributes0 = await element(by.id('item-4')).getAttributes();
-    jestExpect(attributes0.text).toContain('Mandolarian, 2021');
+    jestExpect(attributes0.text).toContain('Use_Movie_fake_4, 2021');
   });
 });

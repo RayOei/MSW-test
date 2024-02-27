@@ -37,11 +37,11 @@ export const handlers = [
       title: 'Handler response',
       description: 'App fetched this from a MSW endpoint!',
       movies: [
-        {id: '1', title: 'Inception', releaseYear: '2010'},
-        {id: '2', title: 'Star Wars', releaseYear: '1977'},
-        {id: '3', title: 'The Matrix', releaseYear: '1999'},
-        {id: '4', title: 'Interstellar', releaseYear: '2014'},
-        {id: '5', title: 'Back to the Future', releaseYear: '1985'},
+        {id: '1', title: 'Movie_fake_1', releaseYear: '2010'},
+        {id: '2', title: 'Movie_fake_2', releaseYear: '1977'},
+        {id: '3', title: 'Movie_fake_3', releaseYear: '1999'},
+        {id: '4', title: 'Movie_fake_4', releaseYear: '2014'},
+        {id: '5', title: 'Movie_fake_5', releaseYear: '1985'},
       ],
     });
   }),
