@@ -21,7 +21,7 @@ Originally this demo app was made for reported issue [#1](https://github.com/msw
 
 1. It seems the [server.use](./e2e/starter.test.js#68) definition is added to the stack but is not triggered when a call is intercepted
 2. It seems the case where [server.resetHandler](./e2e/starter.test.js#66) is used with a new definition, the call is no longer intercepted
-3. It seems that handler definition for [fake_reactnative.dev/movies.json](/e2e/mocks/handlers.js#35) is not called when the app is loading while it is expected to be used from the moment `msw` is initialised
+3. ~~It seems that handler definition for [fake_reactnative.dev/movies.json](/e2e/mocks/handlers.js#35) is not called when the app is loading while it is expected to be used from the moment `msw` is initialised~~ This is a RN initialisation issue. The `msw` example in the documentation is incorrect and needs improving.
 4. It seems that the handler with the definition [once](/e2e/mocks/handlers.js#9) is always called while the expectation is that the 2nd and subsequent calls would trigger the [next definition](/e2e/mocks/handlers.js#17) for `reactnative.dev/movies.json`.
 
 > In short: there seem to be issues with the handling of intercepted calls and the processing of the defined responses.
