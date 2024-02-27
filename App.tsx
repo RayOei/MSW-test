@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, FlatList, Text, Button, View} from 'react-native';
+import './e2e/msw.polyfills';
+import { server } from './e2e/mocks/server';
 
 type Movie = {
   id: string;
@@ -9,8 +11,23 @@ type Movie = {
 
 const App = () => {
   const [isLoading, setLoading] = useState(true);
+  const [isRunning, setRun] = useState(false);
   const [data, setData] = useState<Movie[]>([]);
+
+  async function enableMocking() {
+    if (__DEV__ && !isRunning) {
+      console.log('MSW loading.......');
+      server.listen();
+      console.log('MSW listening.......');
+      console.log(server.listHandlers());
+      setRun(true);
+    }
+  }
+
   console.log('......reload APP.......');
+  enableMocking().then(() => {
+    console.log('MSW started.......');
+  });
 
   const getMovies = async () => {
     try {
@@ -120,6 +137,10 @@ const App = () => {
 
   useEffect(() => {
     getFakeMovies();
+    return function cleanup() {
+      server.close();
+      console.log('>>> MSW closed! <<<');
+    };
   }, []);
 
   return (
@@ -149,13 +170,13 @@ const App = () => {
           />
           <Button
             onPress={() => getMovies()}
-            testID="reset"
+            testID="getMovies"
             title="GetMovies"
             color="green"
           />
           <Button
             onPress={() => getFakeMovies()}
-            testID="ververs"
+            testID="getFakeMovies"
             title="GetFakeMovies"
             color="red"
           />
