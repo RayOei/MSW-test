@@ -38,7 +38,7 @@ describe('Example', () => {
     jestExpect(attributes0.text).toContain('Only returned once, 404');
   });
 
-  it('2nd getMovies should return `last again` => THIS ONE FAILS', async () => {
+  it('2nd getMovies should return `Some other` => THIS ONE FAILS', async () => {
     await element(by.id('getMovies')).tap();
     await expect(element(by.id('item-1'))).toBeVisible();
     const attributes0 = await element(by.id('item-1')).getAttributes();
