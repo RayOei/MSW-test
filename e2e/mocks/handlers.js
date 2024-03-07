@@ -1,7 +1,7 @@
 import {http, bypass, HttpResponse, passthrough} from 'msw';
 
 export const handlers = [
-  http.all('http://localhost:8081/symbolicate', ({request}) => {
+  http.get('http://localhost:8081/symbolicate', ({request}) => {
     bypass(request);
   }),
 
