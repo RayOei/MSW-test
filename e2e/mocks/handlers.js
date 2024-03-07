@@ -7,7 +7,7 @@ export const handlers = [
 
   // Expected to be returned once - but it isn't
   http.get('https://reactnative.dev/movies.json', () => {
-    return new HttpResponse('Should be returned once, only', {
+    return new HttpResponse('Only returned once', {
       status: 404,
       once: true,
     });
