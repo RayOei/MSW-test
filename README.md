@@ -28,7 +28,7 @@ Originally this demo app was made for reported issue [#1](https://github.com/msw
 
 ## Demo app
 
-The app is based on the React Native `Quick starter` demo: [**React Native**](https://reactnative.dev) project. Where a movie list is retrieved. This app has been modified to:
+The app is based on the React Native `Quick starter` demo: [**React Native**](https://reactnative.dev/docs/environment-setup) project. Where a movie list is retrieved. This app has been modified to:
 
 1. Retrieve a fake URL with the [FakeMovies] button
 2. Retrieve the real URL with the [GetMovies] button - although the behaviour is controlled by the handlers so the `real` response should not be shown
